@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mass — Portfolio • Frontend Engineer</title>
+  <meta name="description" content="Mass — Frontend Developer. React, Vite, Supabase, Python. Projects: Travel, Petroleum, Offline Booking (C), Chatbot, Business Directory, Web Agency, Clock-in/out, PDF Builder.">
+  <link rel="canonical" href="https://your-site.example/" />
+  <meta property="og:title" content="Mass — Portfolio" />
+  <meta property="og:description" content="Frontend developer portfolio — React, Vite, Supabase, Python" />
+  <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Mass+Portfolio" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* ============= Design tokens & reset ============= */
+    :root{
+      --bg:#ffffff; --text:#0b1220; --muted:#334155;
+      --panel:#f6f9fb; --card:#ffffff; --accent:#ff6600; --accent-2:#4ac1ff;
+      --border:#e6e9ef; --glass: rgba(2,6,23,0.04);
+      --card-radius:14px; --max-w:1100px; --focus: 3px solid rgba(74,193,255,0.16);
+    }
+    /* Dark theme variables */
+    body.dark{
+      --bg:#071224; --text: color-mix(in srgb, white 92%, transparent);
+      --muted:#94a3b8; --panel: rgba(255,255,255,0.03);
+      --card: rgba(255,255,255,0.02); --accent:#36d399; --accent-2:#4ac1ff;
+      --border: rgba(255,255,255,0.04); --glass: rgba(255,255,255,0.04); --focus: 3px solid rgba(74,193,255,0.18);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      line-height:1.45; overflow-x:hidden; scroll-behavior:smooth;
+    }
+    img{max-width:100%; display:block}
+    a{color:inherit}
+    button{font-family:inherit}
+    :focus{outline:none; box-shadow:var(--focus); border-radius:8px}
+
+    /* ============= Layout & nav ============= */
+    .site { max-width:var(--max-w); margin:0 auto; padding:0 18px; }
+    nav{
+      position:fixed; left:0; right:0; top:0; z-index:90;
+      background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00));
+      backdrop-filter: blur(6px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:var(--max-w);margin:0 auto;padding:10px 18px}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{background:linear-gradient(90deg,var(--accent),var(--accent-2));padding:6px 10px;border-radius:999px;color:#02121a;font-weight:800}
+    .nav-links{display:flex;gap:8px;align-items:center}
+    .nav-links a{padding:8px 10px;border-radius:10px;color:var(--muted);text-decoration:none}
+    .nav-links a[aria-current="true"]{color:var(--accent); font-weight:700}
+    .chip{padding:8px 12px;border-radius:999px;background:var(--panel);color:var(--muted);border:1px solid var(--border);cursor:pointer}
+
+    /* ============= Hero ============= */
+    .hero{min-height:84vh;display:flex;align-items:center;justify-content:center;padding-top:72px;position:relative;overflow:hidden}
+    .hero-visual{position:absolute; inset:0; pointer-events:none; z-index:0}
+    .conic{position:absolute; left:-12%; top:-20%; width:1200px; height:600px; border-radius:50%; filter:blur(72px); opacity:0.95;
+      background:conic-gradient(from 120deg, #019f9a23, #030a11, #f7aef8, #ffd3b6);
+      transform:rotate(0deg); animation: spin 22s linear infinite;}
+    .orb{position:absolute; right:-12%; bottom:-12%; width:520px;height:520px;border-radius:50%; filter:blur(52px);
+      background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+      animation: floaty 9s ease-in-out infinite alternate;}
+    @keyframes spin { to{ transform:rotate(360deg) } }
+    @keyframes floaty { to{ transform: translateY(-18px) } }
+
+    .hero-inner{position:relative; z-index:2; width:100%; text-align:center; padding:32px 12px; }
+    .hero h1{font-size:clamp(1.6rem,4vw,2.6rem); color:var(--accent-2); margin:0 0 6px}
+    .hero p.lead{font-size:clamp(1rem,2.3vw,1.15rem); color:var(--muted); margin:0 0 18px}
+    .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn{padding:10px 16px;border-radius:12px;border:none;font-weight:700;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#02121a;box-shadow: 0 8px 20px rgba(2,6,23,0.08)}
+    .btn.ghost{background:transparent;color:var(--muted); border:1px solid var(--border)}
+    .typing{font-weight:600;display:inline-block;white-space:nowrap;border-right:2px solid rgba(0,0,0,0.08);padding-right:.4rem}
+
+    /* ============= HR divider ============= */
+    hr.section-hr{border:none;height:2px;margin:34px auto; width:92%; background:linear-gradient(90deg, transparent, var(--border), transparent)}
+
+    /* ============= About ============= */
+    section{padding:64px 18px}
+    .about{position:relative; overflow:hidden; border-radius:18px; padding:24px; margin:18px auto; max-width:var(--max-w);}
+    .about-bg{position:absolute;inset:0;z-index:0;background:
+      radial-gradient(circle at 20% 20%, rgba(0, 9, 255, 0.97), transparent 20%),
+      radial-gradient(circle at 80% 30%, rgba(254,202,87,0.08), transparent 20%),
+      radial-gradient(circle at 40% 80%, rgba(84,160,255,0.08), transparent 20%);
+      background-size:200% 200%; animation:bgShift 14s ease-in-out infinite}
+    @keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .about-card{position:relative;z-index:2; background:var(--card); padding:26px; border-radius:14px; box-shadow: 0 8px 30px rgba(2,6,23,0.04);}
+    .about-grid{display:grid;gap:18px;grid-template-columns:1fr;align-items:center}
+    @media(min-width:900px){ .about-grid{grid-template-columns: 1fr 360px} }
+    .bio h2{margin:0 0 8px; color:var(--accent-2)}
+    .bio p{color:var(--muted); margin:0 0 12px}
+    .quote{font-style:italic;color:var(--accent); margin-top:6px}
+    .profile{display:flex;flex-direction:column;align-items:center;gap:10px}
+    .profile img{width:148px;height:148px;border-radius:50%;object-fit:cover;border:4px solid var(--panel)}
+
+    /* ============= Skills ============= */
+    .skills{display:flex;flex-wrap:wrap;gap:10px}
+    .skill{padding:8px 10px;border-radius:999px;background:var(--panel);color:var(--muted);font-weight:600;transform:translateY(0);transition:transform .28s ease}
+    .skill:hover{transform:translateY(-6px); color:var(--accent)}
+
+    /* ============= Projects ============= */
+    .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:12px}
+    .chip{padding:8px 12px;border-radius:999px;background:var(--panel);color:var(--muted);border:1px solid var(--border);cursor:pointer;transition:transform .18s ease}
+    .chip:active{transform:scale(.98)}
+    .chip.active{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#02121a;border:none}
+    .search{padding:10px 12px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--muted);min-width:240px}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:18px}
+    .card{background:var(--card);border-radius:12px;padding:12px;border:1px solid var(--border);transition:transform .28s ease, box-shadow .28s}
+    .card:hover{transform:translateY(-8px) rotateX(2deg); box-shadow:0 18px 40px rgba(2,6,23,0.06)}
+    .cover{height:160px;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#f0f4ff,#edf2ff)}
+    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{font-size:.78rem;padding:6px 8px;border-radius:8px;background:var(--panel);color:var(--muted)}
+
+    /* ============= Modal ============= */
+    .modal-backdrop{position:fixed;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.75));display:none;align-items:center;justify-content:center;z-index:120;padding:20px}
+    .modal{max-width:940px;width:100%;background:var(--bg);border-radius:12px;padding:18px;border:1px solid var(--border);box-shadow:0 30px 80px rgba(2,6,23,0.08)}
+    .modal .gallery{display:grid;grid-template-columns:1fr 260px;gap:12px}
+    @media(max-width:900px){ .modal .gallery{grid-template-columns:1fr} }
+    .modal h3{margin:0 0 6px}
+    .modal p{color:var(--muted)}
+
+    /* ============= Contact ============= */
+    .contact-grid{display:grid;grid-template-columns:1fr 360px;gap:16px}
+    @media(max-width:900px){ .contact-grid{grid-template-columns:1fr} }
+    .form input,.form textarea{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text);margin-bottom:10px}
+    .form textarea{min-height:140px}
+
+    /* ============= Footer ============= */
+    footer{padding:28px 18px;text-align:center;color:var(--muted);border-top:1px solid var(--border);margin-top:36px}
+    .socials{display:flex;gap:8px;align-items:center;justify-content:center}
+    .socials a{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;background:var(--panel);color:var(--muted);text-decoration:none}
+    .back-top{position:fixed;right:18px;bottom:18px;padding:10px;border-radius:999px;background:var(--accent-2);color:#02121a;font-weight:800;z-index:150;cursor:pointer;box-shadow:0 18px 40px rgba(2,6,23,0.08)}
+
+    @media (prefers-reduced-motion: reduce){
+      .conic, .orb, .card, .chip { animation: none !important; transition: none !important; transform: none !important }
+    }
+
+    #explore{
+        text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav aria-label="Main navigation">
+    <div class="nav-inner site">
+      <div class="brand"><div class="logo">Mass</div><div style="color:var(--muted)">Portfolio</div></div>
+      <div class="nav-links" role="navigation" aria-label="Top links">
+        <a href="#hero">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <button id="themeToggle" class="chip" aria-pressed="false" title="Toggle theme">Theme</button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <section id="hero" class="hero" role="banner" aria-label="Intro">
+      <div class="hero-visual" aria-hidden>
+        <div class="conic" aria-hidden></div>
+        <div class="orb" aria-hidden></div>
+      </div>
+
+      <div class="hero-inner site">
+        <h1>Hi, I’m Mass — I build delightful web experiences.</h1>
+        <p class="lead">I design & ship real-world applications for businesses — React, Vite, Supabase, Python.</p>
+        <div id="typing" class="typing" aria-live="polite"></div>
+
+        <div class="cta-row" style="margin-top:16px">
+          <a class="btn" id="explore" href="#projects">Explore projects</a>
+          <button class="btn ghost" id="hireBtn">Hire me</button>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-hr">
+
+    <!-- ABOUT -->
+    <section id="about" aria-labelledby="about-title" class="about">
+      <div class="about-bg" aria-hidden></div>
+      <div class="about-card site about-grid" role="region" aria-label="About Mass">
+        <div class="bio">
+          <h2 id="about-title">About</h2>
+          <p>With 3+ years designing websites and web apps, I turn ideas into delightful products. I focus on clean UI, fast performance, and practical engineering.</p>
+          <p><strong>What you'll find:</strong> Booking systems, SaaS-style web apps, offline utilities, chatbots, and automation tools.</p>
+          <div class="quote">“Progress Over Perfection. Built to Lead.”</div>
+
+          <h3 style="margin-top:14px">Skills</h3>
+          <div class="skills" id="skills" aria-hidden="false"></div>
+        </div>
+
+        <aside class="profile" aria-label="Profile card">
+          <!-- Replace with your photo -->
+          <img src="Mass.jpg" alt="Mass — frontend developer" width="148" height="148" loading="lazy" />
+          <div style="text-align:center">
+            <div style="font-weight:800">Mass Mass</div>
+            <div style="color:var(--muted);font-size:.95rem">Frontend Developer • Mentor</div>
+            <div style="margin-top:10px"><a href="#" class="chip" aria-label="Download CV">Download CV</a></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <hr class="section-hr">
+
+    <!-- PROJECTS -->
+    <section id="projects" aria-labelledby="projects-title" class="site">
+      <span class="section-title" id="projects-title" style="display:block;text-align:center;color:var(--accent-2);font-size:1.15rem;margin-bottom:8px">Featured Projects</span>
+      <div class="section-sub" style="text-align:center;color:var(--muted);margin-bottom:12px">Filter, search, and open a case study to see details.</div>
+
+      <div class="controls" role="toolbar" aria-label="Filters">
+        <div id="filterBar" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"></div>
+        <input id="search" class="search" placeholder="Search projects… (press /)" aria-label="Search projects" />
+      </div>
+
+      <div id="grid" class="grid" aria-live="polite" aria-atomic="true"></div>
+    </section>
+
+    <hr class="section-hr">
+
+    <!-- CONTACT -->
+    <section id="contact" aria-labelledby="contact-title" class="site">
+      <span class="section-title" id="contact-title" style="display:block;text-align:center;color:var(--accent-2);font-size:1.15rem;margin-bottom:8px">Contact</span>
+      <div class="section-sub" style="text-align:center;color:var(--muted);margin-bottom:18px">Have a project or role? Let's talk — demo contact stores locally unless you plug a Formspree endpoint.</div>
+
+      <div class="contact-grid">
+        <div class="panel form">
+          <form id="contactForm" method="POST" aria-label="Contact form">
+            <!-- To connect Formspree, add action="https://formspree.io/f/{your-id}" -->
+            <input id="name" name="name" placeholder="Your name" required />
+            <input id="email" name="email" type="email" placeholder="Email address" required />
+            <textarea id="message" name="message" placeholder="Tell me about your project..." required></textarea>
+            <div style="display:flex;gap:10px;align-items:center">
+              <button class="btn" type="submit">Send message</button>
+              <button type="button" class="chip" id="saveDemo">Save locally</button>
+              <div style="margin-left:auto;color:var(--muted);font-size:.9rem" id="contactStatus" aria-live="polite"></div>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <h3 style="margin-top:0">Reach out</h3>
+          <p style="color:var(--muted)">Email</p>
+          <p><a href="mailto:you@example.com" style="color:var(--accent-2)">masscode64@gmail.com</a></p>
+          <p style="color:var(--muted)">Social</p>
+          <div class="socials" style="margin-top:6px">
+            <a href="https://github.com/yourgithub" aria-label="GitHub" title="GitHub" rel="me"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/yourprofile" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="https://twitter.com/yourhandle" aria-label="Twitter" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://wa.me/your-number" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          </div>
+
+          <hr style="border:none;border-top:1px solid var(--border);margin:12px 0" />
+          <p style="color:var(--muted);font-size:.95rem">Need SQL seed for Supabase or a ready React repo? Click to copy ready-to-run SQL with your projects.</p>
+          <div style="margin-top:8px"><button class="chip" id="seedSqlBtn">Copy Supabase SQL seed</button></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="site" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div>© <span id="year"></span> Mass • Built with care</div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <!-- <a href="#hero" class="chip">Back to top</a> -->
+        <div class="socials" aria-hidden>
+          <a href="https://github.com/yourgithub">GitHub</a>
+          <a href="https://linkedin.com/in/yourprofile">LinkedIn</a>
+          <a href="mailto:you@example.com">Email</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top floating -->
+  <button class="back-top" id="backTop" aria-label="Back to top" title="Back to top">↑</button>
+
+  <!-- Project detail modal -->
+  <div id="modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+    <div class="modal" role="document" aria-labelledby="modalTitle">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div>
+          <h3 id="modalTitle"></h3>
+          <div id="modalTech" style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap"></div>
+        </div>
+        <div><button id="modalClose" class="chip">Close</button></div>
+      </div>
+      <div class="gallery">
+        <div id="modalMain" style="border-radius:8px;overflow:hidden;background:#061022;min-height:260px"></div>
+        <aside style="padding-left:12px">
+          <h4 style="margin-top:0">Summary</h4>
+          <p id="modalSummary" style="color:var(--muted)"></p>
+          <div style="margin-top:12px"><a id="modalLive" class="btn ghost" target="_blank" rel="noreferrer">Live demo</a> <a id="modalCode" class="btn" style="margin-left:8px" target="_blank" rel="noreferrer">Code</a></div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ================= Data: projects (update these URLs & screenshots to your real ones) ================ */
+   const projects = [
+  {
+    id: 1,
+    title: 'LinearTravels — Travel Agency',
+    slug: 'travel-agency',
+    summary: 'Booking catalog, WhatsApp checkout, responsive UI.',
+    tech: ['React', 'Vite', 'Stripe'],
+    category: 'react',
+    demo_url: 'https://lineartravels.com',
+    repo_url: 'https://github.com/yourgithub/lineartravels',
+    cover: 'images/unnamed.jpg'
+  },
+  {
+    id: 2,
+    title: 'PetroCore — Petroleum Site',
+    slug: 'petroleum',
+    summary: 'Corporate site and operations dashboard.',
+    tech: ['React', 'Vite'],
+    category: 'agency',
+    demo_url: 'https://petrocore.example.com',
+    repo_url: 'https://github.com/yourgithub/petrocore',
+    cover: 'images/petroleum.png'
+  },
+  {
+    id: 3,
+    title: 'CityLion — Clock In/Out',
+    slug: 'clock',
+    summary: 'Time tracker with CSV export and logs.',
+    tech: ['HTML', 'CSS', 'JS'],
+    category: 'vanilla',
+    demo_url: 'https://yourdomain.com/clockin',
+    repo_url: 'https://github.com/yourgithub/clockin-out',
+    cover: 'images/clockin.png'
+  },
+  {
+    id: 4,
+    title: 'Offline Booking System (C)',
+    slug: 'offline-booking-c',
+    summary: 'Console booking system writing to text files (C).',
+    tech: ['C'],
+    category: 'c',
+    demo_url: '',
+    repo_url: 'https://github.com/yourgithub/offline-booking-c',
+    cover: 'images/offline-booking.png'
+  },
+  {
+    id: 5,
+    title: 'BizConnect — Business Directory',
+    slug: 'business-directory',
+    summary: 'Directory with search, filters & SMS verification.',
+    tech: ['React', 'Vite', 'Firebase'],
+    category: 'react',
+    demo_url: 'https://liberiabizconnect.com',
+    repo_url: 'https://github.com/yourgithub/bizconnect',
+    cover: 'images/biz-directory.png'
+  },
+  {
+    id: 6,
+    title: 'Jula Tech — Web Design Agency',
+    slug: 'web-design-agency',
+    summary: 'Agency website with services and gallery.',
+    tech: ['React', 'Vite'],
+    category: 'agency',
+    demo_url: 'https://julatech.example.com',
+    repo_url: 'https://github.com/yourgithub/julatech',
+    cover: 'images/web-agency.png'
+  },
+  {
+    id: 7,
+    title: 'Study PDF Builder',
+    slug: 'pdf-builder',
+    summary: 'Python tool to generate automated PDFs (FPDF).',
+    tech: ['Python'],
+    category: 'python',
+    demo_url: '',
+    repo_url: 'https://github.com/yourgithub/pdf-builder',
+    cover: 'images/Mass.jpg'
+  },
+  {
+    id: 8,
+    title: 'React Chatbot',
+    slug: 'chatbot-react',
+    summary: 'Context-aware chatbot demo integrated to site.',
+    tech: ['React', 'LLM'],
+    category: 'ai',
+    demo_url: 'https://chatbot.example.com',
+    repo_url: 'https://github.com/yourgithub/chatbot',
+    cover: 'images/chatbot.png'
+  },
+  {
+    id: 9,
+    title: 'TaskMaster — Task Management App',
+    slug: 'taskmaster',
+    summary: 'Organize and track your tasks with ease.',
+    tech: ['React', 'Vite', 'Supabase'],
+    category: 'react',
+    demo_url: 'https://taskmaster.example.com',
+    repo_url: '',
+    cover: 'images/taskmaster.png' // ✅ Added cover
+  },
+  {
+    id: 10,
+    title: 'Student Learning System',
+    slug: 'student-learning-system',
+    summary: 'A platform for students to access learning materials and track progress.',
+    tech: ['Python', 'Flask', 'SQLite'],
+    category: 'python',
+    demo_url: '',
+    repo_url: '',
+    cover: 'images/student-learning.png' // ✅ Added cover
+  }
+];
+
+    const categories = [
+      { key:'all', label:'All' },
+      { key:'react', label:'React' },
+      { key:'python', label:'Python' },
+      { key:'c', label:'C' },
+      { key:'ai', label:'AI' },
+      { key:'agency', label:'Agency' },
+      { key:'vanilla', label:'HTML/CSS/JS' },
+    ];
+
+    /* ================= Helpers & refs ================= */
+    const root = document.documentElement;
+    const body = document.body;
+    const typingEl = document.getElementById('typing');
+    const filterBar = document.getElementById('filterBar');
+    const gridEl = document.getElementById('grid');
+    const searchEl = document.getElementById('search');
+    const themeToggle = document.getElementById('themeToggle');
+    const backTop = document.getElementById('backTop');
+    const modal = document.getElementById('modal');
+    const modalClose = document.getElementById('modalClose');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalTech = document.getElementById('modalTech');
+    const modalSummary = document.getElementById('modalSummary');
+    const modalMain = document.getElementById('modalMain');
+    const modalLive = document.getElementById('modalLive');
+    const modalCode = document.getElementById('modalCode');
+
+    /* ================= Theme toggle (persist) ================= */
+    function setTheme(t){
+      if(t === 'dark'){ body.classList.add('dark'); themeToggle.textContent='Dark'; themeToggle.setAttribute('aria-pressed','true'); }
+      else { body.classList.remove('dark'); themeToggle.textContent='Light'; themeToggle.setAttribute('aria-pressed','false'); }
+      localStorage.setItem('site_theme', t);
+    }
+    const stored = localStorage.getItem('site_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    setTheme(stored);
+    themeToggle.addEventListener('click', ()=> setTheme(body.classList.contains('dark') ? 'light' : 'dark'));
+
+    /* ================= Typing effect (loop) ================= */
+    const phrases = ["Frontend Developer · React & Vite", "Backend Explorer · Supabase & Node", "Problem Solver · Real Projects", "Available for hire & collabs"];
+    let pi=0, li=0, dir=1;
+    (function typeTick(){
+      const p = phrases[pi % phrases.length];
+      if(dir === 1){
+        li++; typingEl.textContent = p.slice(0,li) + ((Math.floor(Date.now()/500)%2) ? '|' : ' ');
+        if(li >= p.length){ dir = -1; setTimeout(typeTick, 1200); return; }
+      } else {
+        li--; typingEl.textContent = p.slice(0,li) + ((Math.floor(Date.now()/500)%2) ? '|' : ' ');
+        if(li <= 0){ dir = 1; pi++; }
+      }
+      setTimeout(typeTick, dir===1 ? 80 : 30);
+    })();
+
+    /* ================= Populate skills ================= */
+    const skills = ['HTML','CSS','JavaScript','React','Vite','Supabase','Firebase','Node.js','Python','C','Flask','Tailwind','Framer Motion','UI/UX'];
+    const skillsEl = document.getElementById('skills');
+    skills.forEach(s=>{
+      const el = document.createElement('span'); el.className='skill'; el.textContent = s; skillsEl.appendChild(el);
+    });
+
+    /* ================= Filters & grid rendering ================= */
+    let activeCat = 'all';
+    let query = '';
+    function renderFilterBar(){
+      filterBar.innerHTML = '';
+      categories.forEach(c=>{
+        const btn = document.createElement('button');
+        btn.className = 'chip' + (activeCat === c.key ? ' active' : '');
+        btn.textContent = c.label;
+        btn.addEventListener('click', ()=>{ activeCat = c.key; renderFilterBar(); renderGrid(); });
+        filterBar.appendChild(btn);
+      });
+    }
+    renderFilterBar();
+
+    searchEl.addEventListener('input', e=>{ query = e.target.value.trim().toLowerCase(); renderGrid(); });
+    window.addEventListener('keydown', e => { if(e.key === '/' && document.activeElement.tagName.toLowerCase() !== 'input' && document.activeElement.tagName.toLowerCase() !== 'textarea'){ e.preventDefault(); searchEl.focus(); } });
+
+    function matches(p){
+      const catOk = activeCat === 'all' || (p.category||'').toLowerCase().includes(activeCat) || (p.tech||[]).join(' ').toLowerCase().includes(activeCat);
+      const q = query;
+      const qOk = !q || (`${p.title} ${p.summary} ${(p.tech||[]).join(' ')}`).toLowerCase().includes(q);
+      return catOk && qOk;
+    }
+
+    function escapeHtml(s){ return String(s || '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+    function cardFor(p){
+      const el = document.createElement('article'); el.className='card';
+      el.innerHTML = `
+        <div class="cover">${p.cover ? `<img src="${p.cover}" alt="${escapeHtml(p.title)}" loading="lazy">` : ''}</div>
+        <h3>${escapeHtml(p.title)}</h3>
+        <p>${escapeHtml(p.summary)}</p>
+        <div class="meta"><div class="tags"></div></div>
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+          ${p.demo_url ? `<a class="chip" href="${p.demo_url}" target="_blank" rel="noreferrer">Live</a>` : ''}
+          ${p.repo_url ? `<a class="chip" href="${p.repo_url}" target="_blank" rel="noreferrer">Code</a>` : ''}
+          <button class="chip" data-open="${p.id}" aria-label="Open case study">Case study</button>
+        </div>
+      `;
+      const tags = el.querySelector('.tags');
+      (p.tech||[]).slice(0,5).forEach(t => { const span = document.createElement('span'); span.className='tag'; span.textContent = t; tags.appendChild(span); });
+
+      el.querySelector('[data-open]').addEventListener('click', () => openModal(p));
+      return el;
+    }
+
+    function renderGrid(){
+      gridEl.innerHTML = '';
+      const list = projects.filter(matches);
+      if(!list.length){ gridEl.innerHTML = `<div style="text-align:center;color:var(--muted);padding:28px">No projects found.</div>`; return; }
+      list.forEach(p => gridEl.appendChild(cardFor(p)));
+    }
+    renderGrid();
+
+    /* ============== Modal focus-trap & open/close ============== */
+    const focusableSelectors = 'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])';
+    function trapFocus(container){
+      const nodes = Array.from(container.querySelectorAll(focusableSelectors)).filter(n => !n.hasAttribute('disabled'));
+      if(nodes.length === 0) return () => {};
+      let i = 0;
+      nodes[0].focus();
+      function handleKey(e){
+        if(e.key !== 'Tab') return;
+        i = nodes.indexOf(document.activeElement);
+        if(e.shiftKey){
+          if(document.activeElement === nodes[0]){ e.preventDefault(); nodes[nodes.length-1].focus(); }
+        } else {
+          if(document.activeElement === nodes[nodes.length-1]){ e.preventDefault(); nodes[0].focus(); }
+        }
+      }
+      document.addEventListener('keydown', handleKey);
+      return () => document.removeEventListener('keydown', handleKey);
+    }
+
+    let releaseTrap = null;
+    function openModal(p){
+      modalTitle.textContent = p.title;
+      modalSummary.textContent = p.summary;
+      modalTech.innerHTML = ''; (p.tech||[]).forEach(t => { const s = document.createElement('span'); s.className='tag'; s.textContent = t; s.style.marginRight='6px'; modalTech.appendChild(s); });
+      modalMain.innerHTML = p.cover ? `<img src="${p.cover}" alt="${escapeHtml(p.title)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">` : '';
+      modalLive.href = p.demo_url || '#'; modalCode.href = p.repo_url || '#';
+      modal.style.display = 'flex'; modal.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
+      releaseTrap = trapFocus(modal);
+      modalClose.focus();
+    }
+    function closeModal(){
+      modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); document.body.style.overflow = '';
+      if(releaseTrap) releaseTrap();
+    }
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
+    window.addEventListener('keydown', e => { if(e.key === 'Escape' && modal.style.display === 'flex') closeModal(); });
+
+    /* ================= Contact form (Formspree optional / local demo) ================= */
+    const contactForm = document.getElementById('contactForm');
+    const contactStatus = document.getElementById('contactStatus');
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      contactStatus.textContent = 'Sending…';
+      const data = new FormData(contactForm);
+      const formspreeEndpoint = ''; // <-- set your Formspree endpoint e.g. https://formspree.io/f/xxxxx
+      if(formspreeEndpoint){
+        try {
+          const res = await fetch(formspreeEndpoint, { method:'POST', body: data, headers: { 'Accept': 'application/json' }});
+          if(res.ok){ contactStatus.textContent = 'Thanks — message sent.'; contactForm.reset(); } else { contactStatus.textContent = 'Error sending message.'; }
+        } catch(err){ contactStatus.textContent = 'Error sending message.'; }
+      } else {
+        const store = JSON.parse(localStorage.getItem('mass_messages') || '[]');
+        store.push({ name: data.get('name'), email: data.get('email'), message: data.get('message'), created_at: new Date().toISOString() });
+        localStorage.setItem('mass_messages', JSON.stringify(store));
+        contactStatus.textContent = 'Saved (demo). I will read it locally.';
+        contactForm.reset();
+      }
+      setTimeout(()=> contactStatus.textContent = '', 3500);
+    });
+    document.getElementById('saveDemo').addEventListener('click', () => { contactForm.requestSubmit(); });
+
+    /* ================= Copy SQL seed ================= */
+    document.getElementById('seedSqlBtn').addEventListener('click', () => {
+      const sqlRows = projects.map(p => {
+        const title = p.title.replace(/'/g,"''");
+        const slug = p.slug.replace(/'/g,"''");
+        const summary = p.summary.replace(/'/g,"''");
+        const techArray = (p.tech||[]).map(t=>`"${t.replace(/"/g,'\\\"')}"`).join(',');
+        const category = (p.category||'').replace(/'/g,"''");
+        const demo = (p.demo_url||'').replace(/'/g,"''");
+        const repo = (p.repo_url||'').replace(/'/g,"''");
+        const cover = (p.cover||'').replace(/'/g,"''");
+        return `('${title}','${slug}','${summary}', '{${techArray}}', '${category}', '${repo}', '${demo}', '${cover}')`;
+      }).join(',\n');
+      const sql = `INSERT INTO projects (title, slug, summary, tech, category, repo_url, demo_url, cover) VALUES\n${sql};`;
+      navigator.clipboard?.writeText(sql).then(()=> alert('SQL seed copied to clipboard. Paste into Supabase SQL editor.'));
+    });
+
+    /* ================= Back to top & nav active ================= */
+    document.getElementById('backTop').addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
+    document.getElementById('hireBtn').addEventListener('click', ()=> document.getElementById('contact').scrollIntoView({behavior:'smooth'}));
+
+    // IntersectionObserver for nav active state
+    const sections = Array.from(document.querySelectorAll('main section[id], main .hero'));
+    const navLinks = Array.from(document.querySelectorAll('.nav-links a'));
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(ent => {
+        const id = ent.target.id;
+        const link = navLinks.find(a => a.getAttribute('href') === `#${id}`);
+        if(ent.isIntersecting){
+          navLinks.forEach(a=> a.removeAttribute('aria-current'));
+          if(link) link.setAttribute('aria-current','true');
+        }
+      });
+    }, { threshold: 0.45 });
+    sections.forEach(s => io.observe(s));
+
+    /* ================= Render initial grid & paint year ================= */
+    renderGrid();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ============== Accessibility: skip link ============== */
+    (function addSkipLink(){
+      const a = document.createElement('a'); a.href="#projects"; a.textContent="Skip to projects"; a.className='chip';
+      a.style.position='absolute'; a.style.left='10px'; a.style.top='10px'; a.style.transform='translateY(-9999px)';
+      a.addEventListener('focus', ()=> a.style.transform='translateY(0)');
+      a.addEventListener('blur', ()=> a.style.transform='translateY(-9999px)');
+      document.body.prepend(a);
+    })();
+  </script>
+</body>
+</html>
