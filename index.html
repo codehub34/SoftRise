@@ -16,12 +16,12 @@
   <style>
     /* ============= Design tokens & reset ============= */
     :root{
-      --bg:#ffffff; --text:#0b1220; --muted:#334155;
+      --bg:#ffffff; --text:#0b1220; --muted:#48607a;
       --panel:#f6f9fb; --card:#ffffff; --accent:#ff6600; --accent-2:#4ac1ff;
       --border:#e6e9ef; --glass: rgba(2,6,23,0.04);
       --card-radius:14px; --max-w:1100px; --focus: 3px solid rgba(74,193,255,0.16);
+      --nav-height:64px;
     }
-    /* Dark theme variables */
     body.dark{
       --bg:#071224; --text: color-mix(in srgb, white 92%, transparent);
       --muted:#94a3b8; --panel: rgba(255,255,255,0.03);
@@ -41,27 +41,34 @@
     button{font-family:inherit}
     :focus{outline:none; box-shadow:var(--focus); border-radius:8px}
 
-    /* ============= Layout & nav ============= */
+    /* ============= Layout & nav (sticky) ============= */
     .site { max-width:var(--max-w); margin:0 auto; padding:0 18px; }
     nav{
-      position:fixed; left:0; right:0; top:0; z-index:90;
+      position:fixed; left:0; right:0; top:0; z-index:120; height:var(--nav-height);
       background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00));
       backdrop-filter: blur(6px);
       border-bottom:1px solid var(--border);
     }
-    .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:var(--max-w);margin:0 auto;padding:10px 18px}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:var(--max-w);margin:0 auto;padding:10px 18px;height:100%}
     .brand{display:flex;gap:10px;align-items:center}
     .logo{background:linear-gradient(90deg,var(--accent),var(--accent-2));padding:6px 10px;border-radius:999px;color:#02121a;font-weight:800}
     .nav-links{display:flex;gap:8px;align-items:center}
-    .nav-links a{padding:8px 10px;border-radius:10px;color:var(--muted);text-decoration:none}
-    .nav-links a[aria-current="true"]{color:var(--accent); font-weight:700}
+    .nav-links a{padding:8px 10px;border-radius:10px;color:var(--muted);text-decoration:none;font-weight:600;font-size:.95rem}
+    .nav-links a[aria-current="true"]{color:var(--accent); font-weight:800}
     .chip{padding:8px 12px;border-radius:999px;background:var(--panel);color:var(--muted);border:1px solid var(--border);cursor:pointer}
 
+    /* small screens nav */
+    @media (max-width:720px){
+      .nav-links{gap:6px}
+      .nav-inner{padding:8px}
+    }
+
     /* ============= Hero ============= */
-    .hero{min-height:84vh;display:flex;align-items:center;justify-content:center;padding-top:72px;position:relative;overflow:hidden}
+    main{padding-top:calc(var(--nav-height) + 12px)}
+    .hero{min-height:78vh;display:flex;align-items:center;justify-content:center;padding-top:12px;position:relative;overflow:hidden}
     .hero-visual{position:absolute; inset:0; pointer-events:none; z-index:0}
-    .conic{position:absolute; left:-12%; top:-20%; width:1200px; height:600px; border-radius:50%; filter:blur(72px); opacity:0.95;
-      background:conic-gradient(from 120deg, #019f9a23, #030a11, #f7aef8, #ffd3b6);
+    .conic{position:absolute; left:-12%; top:-18%; width:1200px; height:600px; border-radius:50%; filter:blur(72px); opacity:0.95;
+      background:conic-gradient(from 120deg, #ffffff23, #030a11, #f7aef8, #ffd3b6);
       transform:rotate(0deg); animation: spin 22s linear infinite;}
     .orb{position:absolute; right:-12%; bottom:-12%; width:520px;height:520px;border-radius:50%; filter:blur(52px);
       background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
@@ -69,7 +76,7 @@
     @keyframes spin { to{ transform:rotate(360deg) } }
     @keyframes floaty { to{ transform: translateY(-18px) } }
 
-    .hero-inner{position:relative; z-index:2; width:100%; text-align:center; padding:32px 12px; }
+    .hero-inner{position:relative; z-index:2; width:100%; text-align:center; padding:32px 12px; max-width:980px; margin:0 auto}
     .hero h1{font-size:clamp(1.6rem,4vw,2.6rem); color:var(--accent-2); margin:0 0 6px}
     .hero p.lead{font-size:clamp(1rem,2.3vw,1.15rem); color:var(--muted); margin:0 0 18px}
     .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
@@ -84,9 +91,9 @@
     section{padding:64px 18px}
     .about{position:relative; overflow:hidden; border-radius:18px; padding:24px; margin:18px auto; max-width:var(--max-w);}
     .about-bg{position:absolute;inset:0;z-index:0;background:
-      radial-gradient(circle at 20% 20%, rgba(0, 9, 255, 0.97), transparent 20%),
-      radial-gradient(circle at 80% 30%, rgba(254,202,87,0.08), transparent 20%),
-      radial-gradient(circle at 40% 80%, rgba(84,160,255,0.08), transparent 20%);
+      radial-gradient(circle at 20% 20%, rgba(0, 9, 255, 0.06), transparent 20%),
+      radial-gradient(circle at 80% 30%, rgba(254,202,87,0.03), transparent 20%),
+      radial-gradient(circle at 40% 80%, rgba(84,160,255,0.03), transparent 20%);
       background-size:200% 200%; animation:bgShift 14s ease-in-out infinite}
     @keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
     .about-card{position:relative;z-index:2; background:var(--card); padding:26px; border-radius:14px; box-shadow: 0 8px 30px rgba(2,6,23,0.04);}
@@ -110,18 +117,19 @@
     .chip.active{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#02121a;border:none}
     .search{padding:10px 12px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--muted);min-width:240px}
 
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:18px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:22px}
     .card{background:var(--card);border-radius:12px;padding:12px;border:1px solid var(--border);transition:transform .28s ease, box-shadow .28s}
     .card:hover{transform:translateY(-8px) rotateX(2deg); box-shadow:0 18px 40px rgba(2,6,23,0.06)}
-    .cover{height:160px;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#f0f4ff,#edf2ff)}
+    .cover{height:160px;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#f0f4ff,#edf2ff);display:flex;align-items:center;justify-content:center}
+    .cover img{width:100%;height:100%;object-fit:cover}
     .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
     .tags{display:flex;gap:8px;flex-wrap:wrap}
     .tag{font-size:.78rem;padding:6px 8px;border-radius:8px;background:var(--panel);color:var(--muted)}
 
     /* ============= Modal ============= */
-    .modal-backdrop{position:fixed;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.75));display:none;align-items:center;justify-content:center;z-index:120;padding:20px}
+    .modal-backdrop{position:fixed;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.75));display:none;align-items:center;justify-content:center;z-index:220;padding:20px}
     .modal{max-width:940px;width:100%;background:var(--bg);border-radius:12px;padding:18px;border:1px solid var(--border);box-shadow:0 30px 80px rgba(2,6,23,0.08)}
-    .modal .gallery{display:grid;grid-template-columns:1fr 260px;gap:12px}
+    .modal .gallery{display:grid;grid-template-columns:1fr 300px;gap:12px}
     @media(max-width:900px){ .modal .gallery{grid-template-columns:1fr} }
     .modal h3{margin:0 0 6px}
     .modal p{color:var(--muted)}
@@ -142,9 +150,9 @@
       .conic, .orb, .card, .chip { animation: none !important; transition: none !important; transform: none !important }
     }
 
-    #explore{
-        text-decoration: none;
-    }
+    /* small niceties */
+    h3{font-size:1.05rem}
+    .muted{color:var(--muted)}
   </style>
 </head>
 <body>
@@ -171,9 +179,9 @@
         <div class="orb" aria-hidden></div>
       </div>
 
-      <div class="hero-inner site">
-        <h1>Hi, I’m Mass — I build delightful web experiences.</h1>
-        <p class="lead">I design & ship real-world applications for businesses — React, Vite, Supabase, Python.</p>
+      <div class="hero-inner site" role="region" aria-label="Introduction">
+        <h1>Hi, I’m Mass — I build delightful web & AI experiences.</h1>
+        <p class="lead">I design & ship real-world applications for businesses — React, Vite, Supabase, Python. Founder of Jula Tech (React + Vite) with a 24/7 Python AI agent.</p>
         <div id="typing" class="typing" aria-live="polite"></div>
 
         <div class="cta-row" style="margin-top:16px">
@@ -186,13 +194,13 @@
     <hr class="section-hr">
 
     <!-- ABOUT -->
-    <section id="about" aria-labelledby="about-title" class="about">
+    <section id="about" aria-labelledby="about-title" class="about" role="region">
       <div class="about-bg" aria-hidden></div>
-      <div class="about-card site about-grid" role="region" aria-label="About Mass">
+      <div class="about-card site about-grid" role="article" aria-label="About Mass">
         <div class="bio">
           <h2 id="about-title">About</h2>
-          <p>With 3+ years designing websites and web apps, I turn ideas into delightful products. I focus on clean UI, fast performance, and practical engineering.</p>
-          <p><strong>What you'll find:</strong> Booking systems, SaaS-style web apps, offline utilities, chatbots, and automation tools.</p>
+          <p>With 4+years building websites and web apps, I turn ideas into production-ready products. I focus on clean UI, fast performance, and practical engineering. I run Jula Tech — a React + Vite agency with an always-on Python AI agent.</p>
+          <p><strong>What you'll find:</strong> Booking systems, SaaS-style apps, offline utilities, chatbots, AI automation, and WordPress block development.</p>
           <div class="quote">“Progress Over Perfection. Built to Lead.”</div>
 
           <h3 style="margin-top:14px">Skills</h3>
@@ -201,11 +209,11 @@
 
         <aside class="profile" aria-label="Profile card">
           <!-- Replace with your photo -->
-          <img src="Mass.jpg" alt="Mass — frontend developer" width="148" height="148" loading="lazy" />
+          <img src="mass_ceo.png"alt="Mass — frontend developer" width="148" height="148" loading="lazy" />
           <div style="text-align:center">
-            <div style="font-weight:800">Mass Mass</div>
-            <div style="color:var(--muted);font-size:.95rem">Frontend Developer • Mentor</div>
-            <div style="margin-top:10px"><a href="#" class="chip" aria-label="Download CV">Download CV</a></div>
+            <div style="font-weight:800">Mamudu Massalay</div>
+            <div style="color:var(--muted);font-size:.95rem">Frontend Developer • AI Automation</div>
+            <div style="margin-top:10px"><a href="Mass_Resume.pdf" class="chip" aria-label="Download CV" download>Download CV</a></div>
           </div>
         </aside>
       </div>
@@ -214,7 +222,7 @@
     <hr class="section-hr">
 
     <!-- PROJECTS -->
-    <section id="projects" aria-labelledby="projects-title" class="site">
+    <section id="projects" aria-labelledby="projects-title" class="site" role="region">
       <span class="section-title" id="projects-title" style="display:block;text-align:center;color:var(--accent-2);font-size:1.15rem;margin-bottom:8px">Featured Projects</span>
       <div class="section-sub" style="text-align:center;color:var(--muted);margin-bottom:12px">Filter, search, and open a case study to see details.</div>
 
@@ -223,13 +231,13 @@
         <input id="search" class="search" placeholder="Search projects… (press /)" aria-label="Search projects" />
       </div>
 
-      <div id="grid" class="grid" aria-live="polite" aria-atomic="true"></div>
+      <div id="grid" class="grid" aria-live="polite" aria-atomic="true" style="margin-top:18px"></div>
     </section>
 
     <hr class="section-hr">
 
     <!-- CONTACT -->
-    <section id="contact" aria-labelledby="contact-title" class="site">
+    <section id="contact" aria-labelledby="contact-title" class="site" role="region">
       <span class="section-title" id="contact-title" style="display:block;text-align:center;color:var(--accent-2);font-size:1.15rem;margin-bottom:8px">Contact</span>
       <div class="section-sub" style="text-align:center;color:var(--muted);margin-bottom:18px">Have a project or role? Let's talk — demo contact stores locally unless you plug a Formspree endpoint.</div>
 
@@ -248,16 +256,16 @@
           </form>
         </div>
 
-        <div class="panel">
+        <div class="panel" aria-label="Contact details">
           <h3 style="margin-top:0">Reach out</h3>
-          <p style="color:var(--muted)">Email</p>
-          <p><a href="mailto:you@example.com" style="color:var(--accent-2)">masscode64@gmail.com</a></p>
-          <p style="color:var(--muted)">Social</p>
+          <p class="muted">Email</p>
+          <p><a href="mailto:masskeita64@gmail" style="color:var(--accent-2)">masscode64@gmail.com</a></p>
+          <p class="muted">Social</p>
           <div class="socials" style="margin-top:6px">
-            <a href="https://github.com/yourgithub" aria-label="GitHub" title="GitHub" rel="me"><i class="fab fa-github"></i></a>
-            <a href="https://linkedin.com/in/yourprofile" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="https://twitter.com/yourhandle" aria-label="Twitter" title="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="https://wa.me/your-number" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://github.com/codehub34">GitHub </a>
+          <a href="www.linkedin.com/in/mass-mass-abc123">LinkedIn</a>
+          <a href="mailto:masskeita64@gmail.com">Email</a>
+            <a href="https://wa.me/7633463875" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
           </div>
 
           <hr style="border:none;border-top:1px solid var(--border);margin:12px 0" />
@@ -273,11 +281,10 @@
     <div class="site" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
       <div>© <span id="year"></span> Mass • Built with care</div>
       <div style="display:flex;gap:10px;align-items:center">
-        <!-- <a href="#hero" class="chip">Back to top</a> -->
         <div class="socials" aria-hidden>
-          <a href="https://github.com/yourgithub">GitHub</a>
-          <a href="https://linkedin.com/in/yourprofile">LinkedIn</a>
-          <a href="mailto:you@example.com">Email</a>
+          <a href="https://github.com/codehub34">GitHub </a>
+          <a href="www.linkedin.com/in/mass-mass-abc123">LinkedIn</a>
+          <a href="mailto:masskeita64@gmail.com">Email</a>
         </div>
       </div>
     </div>
@@ -301,7 +308,10 @@
         <aside style="padding-left:12px">
           <h4 style="margin-top:0">Summary</h4>
           <p id="modalSummary" style="color:var(--muted)"></p>
-          <div style="margin-top:12px"><a id="modalLive" class="btn ghost" target="_blank" rel="noreferrer">Live demo</a> <a id="modalCode" class="btn" style="margin-left:8px" target="_blank" rel="noreferrer">Code</a></div>
+          <div style="margin-top:12px">
+            <a id="modalLive" class="btn ghost" target="_blank" rel="noreferrer">Live demo</a>
+            <a id="modalCode" class="btn" style="margin-left:8px" target="_blank" rel="noreferrer">Code</a>
+          </div>
         </aside>
       </div>
     </div>
@@ -309,118 +319,18 @@
 
   <script>
     /* ================= Data: projects (update these URLs & screenshots to your real ones) ================ */
-   const projects = [
-  {
-    id: 1,
-    title: 'LinearTravels — Travel Agency',
-    slug: 'travel-agency',
-    summary: 'Booking catalog, WhatsApp checkout, responsive UI.',
-    tech: ['React', 'Vite', 'Stripe'],
-    category: 'react',
-    demo_url: 'https://lineartravels.com',
-    repo_url: 'https://github.com/yourgithub/lineartravels',
-    cover: 'images/unnamed.jpg'
-  },
-  {
-    id: 2,
-    title: 'PetroCore — Petroleum Site',
-    slug: 'petroleum',
-    summary: 'Corporate site and operations dashboard.',
-    tech: ['React', 'Vite'],
-    category: 'agency',
-    demo_url: 'https://petrocore.example.com',
-    repo_url: 'https://github.com/yourgithub/petrocore',
-    cover: 'images/petroleum.png'
-  },
-  {
-    id: 3,
-    title: 'CityLion — Clock In/Out',
-    slug: 'clock',
-    summary: 'Time tracker with CSV export and logs.',
-    tech: ['HTML', 'CSS', 'JS'],
-    category: 'vanilla',
-    demo_url: 'https://yourdomain.com/clockin',
-    repo_url: 'https://github.com/yourgithub/clockin-out',
-    cover: 'images/clockin.png'
-  },
-  {
-    id: 4,
-    title: 'Offline Booking System (C)',
-    slug: 'offline-booking-c',
-    summary: 'Console booking system writing to text files (C).',
-    tech: ['C'],
-    category: 'c',
-    demo_url: '',
-    repo_url: 'https://github.com/yourgithub/offline-booking-c',
-    cover: 'images/offline-booking.png'
-  },
-  {
-    id: 5,
-    title: 'BizConnect — Business Directory',
-    slug: 'business-directory',
-    summary: 'Directory with search, filters & SMS verification.',
-    tech: ['React', 'Vite', 'Firebase'],
-    category: 'react',
-    demo_url: 'https://liberiabizconnect.com',
-    repo_url: 'https://github.com/yourgithub/bizconnect',
-    cover: 'images/biz-directory.png'
-  },
-  {
-    id: 6,
-    title: 'Jula Tech — Web Design Agency',
-    slug: 'web-design-agency',
-    summary: 'Agency website with services and gallery.',
-    tech: ['React', 'Vite'],
-    category: 'agency',
-    demo_url: 'https://julatech.example.com',
-    repo_url: 'https://github.com/yourgithub/julatech',
-    cover: 'images/web-agency.png'
-  },
-  {
-    id: 7,
-    title: 'Study PDF Builder',
-    slug: 'pdf-builder',
-    summary: 'Python tool to generate automated PDFs (FPDF).',
-    tech: ['Python'],
-    category: 'python',
-    demo_url: '',
-    repo_url: 'https://github.com/yourgithub/pdf-builder',
-    cover: 'images/Mass.jpg'
-  },
-  {
-    id: 8,
-    title: 'React Chatbot',
-    slug: 'chatbot-react',
-    summary: 'Context-aware chatbot demo integrated to site.',
-    tech: ['React', 'LLM'],
-    category: 'ai',
-    demo_url: 'https://chatbot.example.com',
-    repo_url: 'https://github.com/yourgithub/chatbot',
-    cover: 'images/chatbot.png'
-  },
-  {
-    id: 9,
-    title: 'TaskMaster — Task Management App',
-    slug: 'taskmaster',
-    summary: 'Organize and track your tasks with ease.',
-    tech: ['React', 'Vite', 'Supabase'],
-    category: 'react',
-    demo_url: 'https://taskmaster.example.com',
-    repo_url: '',
-    cover: 'images/taskmaster.png' // ✅ Added cover
-  },
-  {
-    id: 10,
-    title: 'Student Learning System',
-    slug: 'student-learning-system',
-    summary: 'A platform for students to access learning materials and track progress.',
-    tech: ['Python', 'Flask', 'SQLite'],
-    category: 'python',
-    demo_url: '',
-    repo_url: '',
-    cover: 'images/student-learning.png' // ✅ Added cover
-  }
-];
+    const projects = [
+      { id:1, title:'LinearTravels — Travel Agency', slug:'travel-agency', summary:'Booking catalog, WhatsApp checkout, responsive UI.', tech:['React','Vite','Stripe'], category:'react', demo_url:'https://lineartravels.com', repo_url:'https://github.com/yourgithub/lineartravels', cover:'/lineartravels-front.png'},
+      // { id:2, title:'PetroCore — Petroleum Site', slug:'petroleum', summary:'Corporate site and operations dashboard.', tech:['React','Vite'], category:'agency', demo_url:'https://petrocore.example.com', repo_url:'https://github.com/yourgithub/petrocore', cover:'images/petroleum.png' },
+      { id:3, title:'CityLion — Clock In/Out', slug:'clock', summary:'Time tracker with CSV export and logs.', tech:['HTML','CSS','JS'], category:'vanilla', demo_url:'https://yourdomain.com/clockin', repo_url:'https://github.com/yourgithub/clockin-out', cover:'images/clockin.png' },
+      { id:4, title:'Offline Booking System (p)', slug:'offline-booking-c', summary:'Console booking system writing to text files (p)', tech:['p'],category:'c', demo_url:'', repo_url:'https://github.com/yourgithub/offline-booking-c', cover:'/software-enginer.png'},
+      { id:5, title:'BizConnect — Business Directory', slug:'business-directory', summary:'Directory with search, filters & SMS verification.', tech:['React','Vite','Firebase'], category:'react', demo_url:'https://liberiabizconnect.com', repo_url:'https://github.com/yourgithub/bizconnect', cover:'/RiseUp4.png'},
+      { id:6, title:'Jula Tech — Web Design Agency', slug:'web-design-agency', summary:'Agency website with services and gallery.', tech:['React','Vite'], category:'agency', demo_url:'https://julatech.example.com', repo_url:'https://github.com/yourgithub/julatech', cover:'/Jula.png'},
+      { id:7, title:'Study PDF Builder', slug:'pdf-builder', summary:'Python tool to generate automated PDFs (FPDF).', tech:['Python'], category:'python', demo_url:'', repo_url:'https://github.com/yourgithub/pdf-builder', cover:'images/Mass.jpg' },
+      { id:8, title:'React Chatbot', slug:'chatbot-react', summary:'Context-aware chatbot demo integrated to site.', tech:['React','LLM'], category:'ai', demo_url:'https://chatbot.example.com', repo_url:'https://github.com/yourgithub/chatbot', cover:'/MassAi1.png'},
+      // { id:9, title:'TaskMaster — Task Management App', slug:'taskmaster', summary:'Organize and track your tasks with ease.', tech:['React','Vite','Supabase'], category:'react', demo_url:'https://taskmaster.example.com', repo_url:'', cover:'images/taskmaster.png' },
+      { id:10, title:'Student Learning System', slug:'student-learning-system', summary:'Platform for students to access learning materials and track progress.', tech:['Python','Flask','SQLite'], category:'python', demo_url:'', repo_url:'', cover:'/MassAi5.png'}
+    ];
 
     const categories = [
       { key:'all', label:'All' },
@@ -433,7 +343,6 @@
     ];
 
     /* ================= Helpers & refs ================= */
-    const root = document.documentElement;
     const body = document.body;
     const typingEl = document.getElementById('typing');
     const filterBar = document.getElementById('filterBar');
@@ -454,14 +363,14 @@
     function setTheme(t){
       if(t === 'dark'){ body.classList.add('dark'); themeToggle.textContent='Dark'; themeToggle.setAttribute('aria-pressed','true'); }
       else { body.classList.remove('dark'); themeToggle.textContent='Light'; themeToggle.setAttribute('aria-pressed','false'); }
-      localStorage.setItem('site_theme', t);
+      try { localStorage.setItem('site_theme', t); } catch(e) {}
     }
-    const stored = localStorage.getItem('site_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const stored = (function(){ try { return localStorage.getItem('site_theme'); } catch(e){ return null } })() || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     setTheme(stored);
     themeToggle.addEventListener('click', ()=> setTheme(body.classList.contains('dark') ? 'light' : 'dark'));
 
     /* ================= Typing effect (loop) ================= */
-    const phrases = ["Frontend Developer · React & Vite", "Backend Explorer · Supabase & Node", "Problem Solver · Real Projects", "Available for hire & collabs"];
+    const phrases = ["Frontend Developer · React & Vite", "AI Automation · Python", "WordPress Blocks · Full-site Editing", "Available for hire & collabs"];
     let pi=0, li=0, dir=1;
     (function typeTick(){
       const p = phrases[pi % phrases.length];
@@ -476,7 +385,7 @@
     })();
 
     /* ================= Populate skills ================= */
-    const skills = ['HTML','CSS','JavaScript','React','Vite','Supabase','Firebase','Node.js','Python','C','Flask','Tailwind','Framer Motion','UI/UX'];
+    const skills = ['HTML','CSS','JavaScript','React','Vite','Supabase','Firebase','Node.js','Python','C','Flask','Tailwind','Framer Motion','WCAG 2.1','AI/LLMs'];
     const skillsEl = document.getElementById('skills');
     skills.forEach(s=>{
       const el = document.createElement('span'); el.className='skill'; el.textContent = s; skillsEl.appendChild(el);
@@ -512,11 +421,11 @@
     function cardFor(p){
       const el = document.createElement('article'); el.className='card';
       el.innerHTML = `
-        <div class="cover">${p.cover ? `<img src="${p.cover}" alt="${escapeHtml(p.title)}" loading="lazy">` : ''}</div>
-        <h3>${escapeHtml(p.title)}</h3>
-        <p>${escapeHtml(p.summary)}</p>
+        <div class="cover">${p.cover ? `<img src="${p.cover}" alt="${escapeHtml(p.title)}" loading="lazy">` : `<div style="padding:20px;color:var(--muted)">No image</div>`}</div>
+        <h3 style="margin-top:10px">${escapeHtml(p.title)}</h3>
+        <p class="muted" style="margin:6px 0 8px">${escapeHtml(p.summary)}</p>
         <div class="meta"><div class="tags"></div></div>
-        <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           ${p.demo_url ? `<a class="chip" href="${p.demo_url}" target="_blank" rel="noreferrer">Live</a>` : ''}
           ${p.repo_url ? `<a class="chip" href="${p.repo_url}" target="_blank" rel="noreferrer">Code</a>` : ''}
           <button class="chip" data-open="${p.id}" aria-label="Open case study">Case study</button>
@@ -526,6 +435,9 @@
       (p.tech||[]).slice(0,5).forEach(t => { const span = document.createElement('span'); span.className='tag'; span.textContent = t; tags.appendChild(span); });
 
       el.querySelector('[data-open]').addEventListener('click', () => openModal(p));
+      // subtle reveal animation
+      el.style.opacity = 0; el.style.transform = 'translateY(8px)';
+      requestAnimationFrame(()=> { setTimeout(()=>{ el.style.transition = 'opacity .45s ease, transform .45s ease'; el.style.opacity = 1; el.style.transform = 'translateY(0)'; }, 60); });
       return el;
     }
 
@@ -562,7 +474,7 @@
       modalTitle.textContent = p.title;
       modalSummary.textContent = p.summary;
       modalTech.innerHTML = ''; (p.tech||[]).forEach(t => { const s = document.createElement('span'); s.className='tag'; s.textContent = t; s.style.marginRight='6px'; modalTech.appendChild(s); });
-      modalMain.innerHTML = p.cover ? `<img src="${p.cover}" alt="${escapeHtml(p.title)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">` : '';
+      modalMain.innerHTML = p.cover ? `<img src="${p.cover}" alt="${escapeHtml(p.title)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">` : '<div style="padding:40px;color:var(--muted)">No preview</div>';
       modalLive.href = p.demo_url || '#'; modalCode.href = p.repo_url || '#';
       modal.style.display = 'flex'; modal.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
       releaseTrap = trapFocus(modal);
@@ -590,11 +502,13 @@
           if(res.ok){ contactStatus.textContent = 'Thanks — message sent.'; contactForm.reset(); } else { contactStatus.textContent = 'Error sending message.'; }
         } catch(err){ contactStatus.textContent = 'Error sending message.'; }
       } else {
-        const store = JSON.parse(localStorage.getItem('mass_messages') || '[]');
-        store.push({ name: data.get('name'), email: data.get('email'), message: data.get('message'), created_at: new Date().toISOString() });
-        localStorage.setItem('mass_messages', JSON.stringify(store));
-        contactStatus.textContent = 'Saved (demo). I will read it locally.';
-        contactForm.reset();
+        try {
+          const store = JSON.parse(localStorage.getItem('mass_messages') || '[]');
+          store.push({ name: data.get('name'), email: data.get('email'), message: data.get('message'), created_at: new Date().toISOString() });
+          localStorage.setItem('mass_messages', JSON.stringify(store));
+          contactStatus.textContent = 'Saved (demo). I will read it locally.';
+          contactForm.reset();
+        } catch(err){ contactStatus.textContent = 'Error saving message.'; }
       }
       setTimeout(()=> contactStatus.textContent = '', 3500);
     });
@@ -613,8 +527,8 @@
         const cover = (p.cover||'').replace(/'/g,"''");
         return `('${title}','${slug}','${summary}', '{${techArray}}', '${category}', '${repo}', '${demo}', '${cover}')`;
       }).join(',\n');
-      const sql = `INSERT INTO projects (title, slug, summary, tech, category, repo_url, demo_url, cover) VALUES\n${sql};`;
-      navigator.clipboard?.writeText(sql).then(()=> alert('SQL seed copied to clipboard. Paste into Supabase SQL editor.'));
+      const sql = `INSERT INTO projects (title, slug, summary, tech, category, repo_url, demo_url, cover) VALUES\n${sqlRows};`;
+      navigator.clipboard?.writeText(sql).then(()=> alert('SQL seed copied to clipboard. Paste into Supabase SQL editor.')).catch(()=> alert('Copy failed — your browser may block clipboard.'));
     });
 
     /* ================= Back to top & nav active ================= */
@@ -643,11 +557,20 @@
     /* ============== Accessibility: skip link ============== */
     (function addSkipLink(){
       const a = document.createElement('a'); a.href="#projects"; a.textContent="Skip to projects"; a.className='chip';
-      a.style.position='absolute'; a.style.left='10px'; a.style.top='10px'; a.style.transform='translateY(-9999px)';
+      a.style.position='absolute'; a.style.left='10px'; a.style.top='10px'; a.style.transform='translateY(-9999px)'; a.style.zIndex=9999;
       a.addEventListener('focus', ()=> a.style.transform='translateY(0)');
       a.addEventListener('blur', ()=> a.style.transform='translateY(-9999px)');
       document.body.prepend(a);
     })();
+
+    /* ============== Small ARIA/UX fixes ============== */
+    // show back-top when scrolled
+    window.addEventListener('scroll', () => {
+      if(window.scrollY > 600) backTop.style.display = 'block'; else backTop.style.display = 'none';
+    });
+
+    // initially hide backTop
+    backTop.style.display = 'none';
   </script>
 </body>
 </html>
